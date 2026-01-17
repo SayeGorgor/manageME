@@ -1,0 +1,36 @@
+.body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    width: 100vw;
+    padding: 1.125rem 2.5rem;
+    background-color: var(--color-primary);
+    color: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08),
+                0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.options-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    column-gap: .625rem;
+}
+
+.option {
+    padding: .8rem .625rem;
+    background-color: transparent;
+    color: var(--color-secondary);
+    border: 2px solid var(--color-secondary);
+    border-radius: .625rem;
+    font-size: .9rem;
+    font-weight: bolder;
+    transition: color .25s ease, background-color .3s ease;
+}
+
+.option:hover {
+    cursor: pointer;
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+}

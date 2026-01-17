@@ -1,0 +1,54 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--color-primary);
+    color: white;
+    width: 25rem;
+    height: 15rem;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.task-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+}
+
+.task-date,
+.task-options {
+    display: flex;
+    flex-direction: column;
+}
+
+.task-date {
+    row-gap: .5rem;
+}
+
+.task-options {
+    align-items: end;
+    row-gap: .5rem;
+}
+
+.task-options p:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.mark-complete-btn {
+    background-color: transparent;
+    color: var(--color-secondary);
+    border: 2px solid var(--color-secondary);
+    border-radius: .675rem;
+    font-size: 1rem;
+    font-weight: bolder;
+    padding: .5rem;
+    transition: background-color .25s ease, color .25s ease;
+}
+
+.mark-complete-btn:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    cursor: pointer;
+}
