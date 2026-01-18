@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styles from './header.module.css';
 
 export default function Header() {
@@ -9,10 +10,10 @@ export default function Header() {
                 ${styles['options-list']}
             `}> 
                 <li>
-                    <button className={styles['option']}>Join Now!</button>
+                    <Link href='/signup' className={styles['option']}>Join Now!</Link>
                 </li>
                 <li>
-                    <button className={styles['option']}>Log In</button>
+                    <Link href='/login' className={styles['option']}>Log In</Link>
                 </li>
             </ul>
         </header>

@@ -1,0 +1,47 @@
+.login-form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    width: 80%;
+    margin-top: 1rem;
+    margin-bottom: .5rem;
+}
+
+.login-form a {
+    font-size: .8rem;
+    text-decoration: underline;
+    color: var(--color-primary);
+    margin-top: .1rem;
+}
+
+.login-form input {
+    border-radius: .5rem;
+    border: 1px solid black;
+    padding-left: .5rem;
+}
+
+.login-form input,
+.login-btn {
+    height: 2.5rem;
+}
+
+.login-btn {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    border-radius: .5rem;
+    font-size: 1rem;
+    font-weight: bolder;
+    transition: background-color .25s ease, color .25s ease;
+}
+
+.login-btn:hover {
+    cursor: pointer;
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.password-wrapper {
+    display: flex;
+    flex-direction: column;
+}

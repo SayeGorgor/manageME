@@ -1,6 +1,6 @@
-import TaskCard from '@/components/task-card';
+import TaskCard from '@/components/cards/task-card';
 import styles from './page.module.css';
-import EventCard from '@/components/event-card';
+import EventCard from '@/components/cards/event-card';
 
 export default function Home() {
     return(
