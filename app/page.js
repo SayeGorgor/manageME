@@ -2,12 +2,24 @@
 
 import { useState } from "react";
 import styles from "./page.module.css";
+
 import LoginForm from "@/components/forms/login-form";
+import SignupForm from "@/components/forms/signup-form";
+
 import FaceBookLogo from '@/public/icons/facebook_logo.svg';
 import GoogleLogo from '@/public/icons/google_logo.svg';
 
 export default function Landing() {
-  const [loggingIn, setLogginIn] = useState(true);
+  const [loggingInAnimation, setLoggingInAnimation] = useState(true);
+  const [loggingInContent, setLoggingInContent] = useState(true);
+  const [hideAnimations, setHideAnimations] = useState(true);
+
+  //Functions
+  const switchAuthScreen = () => {
+    setHideAnimations(false);
+    setLoggingInAnimation(!loggingInAnimation);
+    setTimeout(() => setLoggingInContent(!loggingInContent), 150);
+  }
 
   return (
       <>
@@ -16,7 +28,8 @@ export default function Landing() {
 
           <section className={`
             ${styles.hero}
-            ${loggingIn ? styles['logging-in'] : styles['signing-up']}
+            ${loggingInAnimation ? styles['logging-in'] : styles['signing-up']}
+            ${hideAnimations ? styles['no-animate'] : ''}
           `}>
             <div className={styles['hero-text']}>
               <h1>manageME</h1>
@@ -26,7 +39,7 @@ export default function Landing() {
               <p>Don't have an account? Click the button below to create one!</p>
               <button 
                 className={styles['switch-options-btn']}
-                onClick={() => setLogginIn(!loggingIn)}
+                onClick={switchAuthScreen}
               >
                 Sign Up
               </button>
@@ -35,13 +48,10 @@ export default function Landing() {
 
           <section className={`
             ${styles['auth-section']}
-            ${loggingIn ? styles['logging-in'] : styles['signing-up']}
+            ${loggingInAnimation ? styles['logging-in'] : styles['signing-up']}
           `}>
-            <h2>Log In</h2>
-            <LoginForm />
-            {/* <a href='#' className={styles['sign-in-link']}>
-                Dont have an account? Sign Up!
-            </a> */}
+            {loggingInContent ? <h2>Log In</h2> : <h2>Sign Up</h2>}
+            {loggingInContent ? <LoginForm /> : <SignupForm />}
             <div className={styles.divider}>
                 <hr />
                 <p>Or</p>
