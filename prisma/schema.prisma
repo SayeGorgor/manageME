@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Users {
+  id String @id @unique @default(uuid()) @db.Uuid
+  email String @unique
+  first_name String
+  last_name String
+  password String
+  phone_number String?
+  pfp Bytes?
+  created_at DateTime @default(now())
+}
+
+model Organizations {
+  id String @id @unique @default(uuid()) @db.Uuid
+  name String
+  created_at DateTime @default(now())
+}
+
+model Memberships {
+  id String @id @unique @default(uuid()) @db.Uuid
+  user_id String @db.Uuid
+  org_id String @db.Uuid
+  role String
+  joined_at DateTime @default(now())
+}
+
+model Tasks {
+  id String @id @unique @default(uuid()) @db.Uuid
+  user_id String @db.Uuid
+  org_id String @db.Uuid
+  content String
+  deadline DateTime?
+  completed_at DateTime?
+  created_at DateTime @default(now())
+}
+
+model Notes {
+  id String @id @unique @default(uuid()) @db.Uuid
+  user_id String @db.Uuid
+  org_id String @db.Uuid
+  content String
+  remind_at DateTime?
+  created_at DateTime @default(now())
+}
+
+model Events {
+  id String @id @unique @default(uuid()) @db.Uuid
+  user_id String @db.Uuid
+  org_id String @db.Uuid
+  date DateTime
+  content String?
+  start_time DateTime?
+  end_time DateTime?
+  created_at DateTime @default(now())
+}

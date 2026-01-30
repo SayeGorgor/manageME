@@ -23,7 +23,6 @@ export default function Landing() {
 
   return (
       <>
-        {/* <Header /> */}
         <main className={styles.main}>
 
           <section className={`
@@ -49,6 +48,7 @@ export default function Landing() {
           <section className={`
             ${styles['auth-section']}
             ${loggingInAnimation ? styles['logging-in'] : styles['signing-up']}
+            ${hideAnimations ? styles['no-animate'] : ''}
           `}>
             {loggingInContent ? <h2>Log In</h2> : <h2>Sign Up</h2>}
             {loggingInContent ? <LoginForm /> : <SignupForm />}

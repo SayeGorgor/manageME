@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
-
-import Header from "@/components/header";
+import TanstackProvider from "@/lib/providers/tanstack-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +26,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable}`}>
-        {children}
+        <TanstackProvider>
+          {children}
+        </TanstackProvider>
       </body>
     </html>
   );

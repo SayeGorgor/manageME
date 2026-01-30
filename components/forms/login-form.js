@@ -11,12 +11,31 @@ export default function LoginForm() {
         e.preventDefault();
         router.push('/dashboard');
     }
+
+    const FormAction = async(formData) => {
+        const res = await fetch('/api/auth/login', {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await res.json();
+
+        console.log('Data: ', data);
+
+        if(data.error) {
+            console.log(data.error);
+            return;
+        };
+
+        router.push('/dashboard');
+    }
     return(
-        <form className={styles['login-form']} onSubmit={login}>
+        <form className={styles['login-form']} action={FormAction}>
             <input 
                 name='email' 
                 type='email' 
                 placeholder='Email'
+                autoComplete='email'
                 required
             />
             <div className={styles['password-wrapper']}>
@@ -24,6 +43,7 @@ export default function LoginForm() {
                     name='password' 
                     type='password' 
                     placeholder='Password'
+                    autoComplete='current-password'
                     required
                 />
                 <a href='#' className={styles['forgot-password-link']}>
