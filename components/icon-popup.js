@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import styles from './icon-popup.module.css';
 
@@ -9,13 +9,14 @@ export default function IconPopup({ showIconPopupWindow, setShowIconPopupWindow 
     const popupRef = useRef(null);
 
     //Functions
-    const logout = () => {
-        router.push('/');
+    const logout = async() => {
+        await fetch('/api/auth/logout', { method: 'POST' });
+        redirect('/');
     }
 
     //Effects
     useEffect(() => {
-        const handleOutsideClick = (e) => {
+        const handleOutsideIconMenuClick = (e) => {
             if(popupRef.current && !popupRef.current.contains(e.target)) {
                 setShowIconPopupWindow(false);
             }
@@ -28,12 +29,12 @@ export default function IconPopup({ showIconPopupWindow, setShowIconPopupWindow 
         }
 
         if(showIconPopupWindow) {
-            window.addEventListener('click', handleOutsideClick);
+            window.addEventListener('click', handleOutsideIconMenuClick);
             window.addEventListener('scroll', handleScroll);
         }
 
         return () => {
-            window.removeEventListener('click', handleOutsideClick);
+            window.removeEventListener('click', handleOutsideIconMenuClick);
             window.addEventListener('scroll', handleScroll);
         }
     }, [showIconPopupWindow]);

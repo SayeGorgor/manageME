@@ -13,6 +13,25 @@ datasource db {
   provider = "postgresql"
 }
 
+model Sessions {
+  id String @id @db.Uuid
+  user_id String @db.Uuid
+  expires_at DateTime
+  created_at DateTime @default(now())
+  last_used DateTime?
+
+  user Users @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([expires_at])
+}
+
+enum Role {
+  MEMBER
+  ADMIN
+  OWNER
+}
+
 model Users {
   id String @id @unique @default(uuid()) @db.Uuid
   email String @unique
@@ -22,20 +41,32 @@ model Users {
   phone_number String?
   pfp Bytes?
   created_at DateTime @default(now())
+
+  session Sessions[]
+  memberships Memberships[]
 }
 
 model Organizations {
   id String @id @unique @default(uuid()) @db.Uuid
   name String
+  pfp Bytes?
   created_at DateTime @default(now())
+
+  memberships Memberships[]
 }
 
 model Memberships {
   id String @id @unique @default(uuid()) @db.Uuid
   user_id String @db.Uuid
   org_id String @db.Uuid
-  role String
+  role Role @default(MEMBER)
   joined_at DateTime @default(now())
+
+  org Organizations @relation(fields: [org_id], references: [id], onDelete: Cascade)
+  user Users @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([org_id])
+  @@index([user_id])
 }
 
 model Tasks {

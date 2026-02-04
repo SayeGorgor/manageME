@@ -45,3 +45,15 @@
     display: flex;
     flex-direction: column;
 }
+
+.error-message {
+    align-self: center;
+    color: red;
+    font-size: 1.1rem;
+}
+
+.loading-message {
+    align-self: center;
+    color: black;
+    font-size: 1.1rem;
+}

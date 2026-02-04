@@ -61,7 +61,8 @@
     padding: 1rem 0;
 }
 
-.bottom-buttons-container button {
+.bottom-buttons-container button,
+.bottom-buttons-container a {
     background-color: black;
     color: var(--color-secondary);
     border: 2px solid var(--color-secondary);
@@ -71,11 +72,13 @@
     padding: 1rem;
 }
 
-.bottom-buttons-container button:hover {
+.bottom-buttons-container button:hover,
+.bottom-buttons-container a:hover {
     cursor: pointer;
     transform: scale(1.02, 1.02);
 }
 
-.bottom-buttons-container button:active {
+.bottom-buttons-container button:active,
+.bottom-buttons-container a:active {
     transform: scale(.98, .98);
 }
