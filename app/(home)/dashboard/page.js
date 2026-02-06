@@ -1,6 +1,7 @@
 import TaskCard from '@/components/cards/task-card';
 import styles from './page.module.css';
 import EventCard from '@/components/cards/event-card';
+import Link from 'next/link';
 
 export default function Home() {
     return(
@@ -58,7 +59,7 @@ export default function Home() {
             </section>
 
             <div className={styles['bottom-buttons-container']}>
-                <a href='/members' className={'view-team-members-btn'}>View Team Members</a>
+                <Link href='/members' className={'view-team-members-btn'}>View Team Members</Link>
             </div>
         </main>
     );

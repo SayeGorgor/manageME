@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useOrg } from '@/lib/providers/current-org-provider';
 import styles from './header.module.css';
 
 import { fetchCurrentUser, fetchOrgs } from '@/lib/client-actions';
@@ -14,6 +15,8 @@ import ChoiceArrow from '@/public/icons/choice_arrow_icon.svg';
 
 export default function Header() {
     const orgDropdownRef = useRef(null);
+
+    const { currentOrg, setCurrentOrg } = useOrg();
 
     const { data: user } = useQuery({
         queryKey: ['user'],
@@ -43,6 +46,12 @@ export default function Header() {
     const handleOrgDropdownClick = (e) => {
         e.stopPropagation();
         setShowOrgDropdownMenu(true);
+    }
+
+    const selectOrg = (e, org) => {
+        e.stopPropagation();
+        setCurrentOrg(org);
+        setShowOrgDropdownMenu(false);
     }
 
     //Effects
@@ -103,7 +112,7 @@ export default function Header() {
                         onClick={handleOrgDropdownClick}
                     >
                         <div className={styles['organization-img']}>A</div>
-                        Amazon
+                        {currentOrg.org.name}
                         <ChoiceArrow className={styles['choice-arrow']} />
 
                         <ul 
@@ -113,9 +122,15 @@ export default function Header() {
                             `}
                             ref={orgDropdownRef}
                         >
-                            {memberships?.map(membership => (
+                            {memberships?.map((membership, index) => (
                                 <li key={membership.org.id}>
-                                    <div className={styles['org-option-card']}>
+                                    <div 
+                                        className={`
+                                            ${styles['org-option-card']}
+                                            ${index === 0 ? styles['top-li'] : ''}
+                                        `}
+                                        onClick={(e) => selectOrg(e, membership)}
+                                    >
                                         <div className={styles['organization-img']}>
                                             {membership.org.name.charAt(0).toUpperCase()}
                                         </div>
@@ -148,16 +163,6 @@ export default function Header() {
                     />
                 </li>
             </ul>
-            {/* <div className={styles['add-org-window']}>
-                <form>
-                    <input 
-                        name='org-name'
-                        type='text'
-                        placeholder='Enter Organization Name'
-                    />
-                    <button type='submit'>Join Org!</button>
-                </form>
-            </div> */}
         </header>
     );
 }

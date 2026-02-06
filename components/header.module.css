@@ -75,6 +75,10 @@
     display: block;
 }
 
+.top-li {
+    border-radius: .625rem .625rem 0 0;
+}
+
 .org-option-card {
     display: flex;
     align-items: center;
