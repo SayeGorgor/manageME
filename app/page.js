@@ -34,13 +34,36 @@ export default function Landing() {
               <h1>manageME</h1>
               <h3>The one stop tool for all your management needs</h3>
             </div>
-            <div className={styles['switch-options']}>
-              <p>Don't have an account? Click the button below to create one!</p>
+            <div 
+              className={`
+                ${styles['switch-options']}
+                ${styles['switch-options-signup']}
+                ${loggingInAnimation ? '' : styles.hidden}
+              `}
+              inert={!loggingInAnimation}
+            >
+              <p>Already have an account? Click the button below to log in!</p>
               <button 
                 className={styles['switch-options-btn']}
                 onClick={switchAuthScreen}
               >
                 Sign Up
+              </button>
+            </div>
+            <div 
+              className={`
+                ${styles['switch-options']}
+                ${styles['switch-options-login']}
+                ${loggingInAnimation ? styles.hidden : ''}
+              `}
+              inert={loggingInAnimation}
+            >
+              <p>Don't have an account? Click the button below to create one!</p>
+              <button 
+                className={styles['switch-options-btn']}
+                onClick={switchAuthScreen}
+              >
+                Log In
               </button>
             </div>
           </section>

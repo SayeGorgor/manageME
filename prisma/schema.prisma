@@ -44,6 +44,7 @@ model Users {
 
   session Sessions[]
   memberships Memberships[]
+  tasks Tasks[]
 }
 
 model Organizations {
@@ -53,6 +54,7 @@ model Organizations {
   created_at DateTime @default(now())
 
   memberships Memberships[]
+  tasks Tasks[]
 }
 
 model Memberships {
@@ -77,6 +79,13 @@ model Tasks {
   deadline DateTime?
   completed_at DateTime?
   created_at DateTime @default(now())
+
+  user Users @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  org Organizations @relation(fields: [org_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([org_id])
+
 }
 
 model Notes {

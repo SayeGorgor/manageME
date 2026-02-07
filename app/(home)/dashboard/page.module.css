@@ -78,6 +78,10 @@
     transform: scale(1.02, 1.02);
 }
 
+.bottom-buttons-container a:hover {
+    text-decoration: none;
+}
+
 .bottom-buttons-container button:active,
 .bottom-buttons-container a:active {
     transform: scale(.98, .98);

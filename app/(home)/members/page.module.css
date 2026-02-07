@@ -28,3 +28,13 @@
     height: 100%;
     width: 100%;
 }
+
+.spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% + 3rem));
+    color: transparent;
+    height: 5rem;
+    width: auto;
+}
