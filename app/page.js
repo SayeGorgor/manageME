@@ -42,7 +42,7 @@ export default function Landing() {
               `}
               inert={!loggingInAnimation}
             >
-              <p>Already have an account? Click the button below to log in!</p>
+              <p>Don't have an account? Click the button below to create one!</p>
               <button 
                 className={styles['switch-options-btn']}
                 onClick={switchAuthScreen}
@@ -58,7 +58,7 @@ export default function Landing() {
               `}
               inert={loggingInAnimation}
             >
-              <p>Don't have an account? Click the button below to create one!</p>
+              <p>Already have an account? Click the button below to log in!</p>
               <button 
                 className={styles['switch-options-btn']}
                 onClick={switchAuthScreen}

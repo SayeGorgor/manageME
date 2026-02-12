@@ -13,6 +13,12 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  MEMBER
+  ADMIN
+  OWNER
+}
+
 model Sessions {
   id String @id @db.Uuid
   user_id String @db.Uuid
@@ -24,12 +30,6 @@ model Sessions {
 
   @@index([user_id])
   @@index([expires_at])
-}
-
-enum Role {
-  MEMBER
-  ADMIN
-  OWNER
 }
 
 model Users {
@@ -45,6 +45,9 @@ model Users {
   session Sessions[]
   memberships Memberships[]
   tasks Tasks[]
+  notes Notes[]
+
+  @@index([email])
 }
 
 model Organizations {
@@ -55,6 +58,10 @@ model Organizations {
 
   memberships Memberships[]
   tasks Tasks[]
+  notes Notes[]
+  events Events[]
+
+  @@index([id])
 }
 
 model Memberships {
@@ -75,7 +82,8 @@ model Tasks {
   id String @id @unique @default(uuid()) @db.Uuid
   user_id String @db.Uuid
   org_id String @db.Uuid
-  content String
+  title String
+  content String?
   deadline DateTime?
   completed_at DateTime?
   created_at DateTime @default(now())
@@ -91,19 +99,29 @@ model Tasks {
 model Notes {
   id String @id @unique @default(uuid()) @db.Uuid
   user_id String @db.Uuid
-  org_id String @db.Uuid
+  org_id String? @db.Uuid
   content String
   remind_at DateTime?
   created_at DateTime @default(now())
+
+  user Users @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  org Organizations? @relation(fields: [org_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
 }
 
 model Events {
   id String @id @unique @default(uuid()) @db.Uuid
-  user_id String @db.Uuid
   org_id String @db.Uuid
+  name String
   date DateTime
+  event_type Role @default(MEMBER)
   content String?
   start_time DateTime?
   end_time DateTime?
   created_at DateTime @default(now())
+
+  org Organizations @relation(fields: [org_id], references: [id], onDelete: Cascade)
+
+  @@index([org_id])
 }

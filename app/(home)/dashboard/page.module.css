@@ -86,3 +86,16 @@
 .bottom-buttons-container a:active {
     transform: scale(.98, .98);
 }
+
+.spinner {
+    color: transparent;
+    height: 5rem;
+    width: auto;
+}
+
+.no-tasks-text-wrapper {
+    display: flex;
+    height: 5rem;
+    align-items: center;
+    font-size: 1.2rem;
+}
