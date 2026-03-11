@@ -8,3 +8,22 @@ export const loginAction = async(formData) => {
 
     return res.json();
 }
+
+export const createNoteAction = async(info) => {
+    const {userID, formData} = info;
+    const res = await fetch(`/api/users/${userID}/notes`, {
+        method: "POST",
+        body: formData
+    });
+
+    const body = await res.json();
+
+    if(!res.ok) {
+        const err = new Error(body.error?.message ?? 'Internal Server Error');
+        err.status = res.status;
+
+        throw err;
+    }
+
+    return body;
+}

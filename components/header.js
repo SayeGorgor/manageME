@@ -8,7 +8,7 @@ import styles from './header.module.css';
 
 import { fetchCurrentUser, fetchOrgs } from '@/lib/client-actions';
 
-import IconPopup from './icon-popup';
+import IconPopup from './popup-windows/icon-popup';
 
 import DefaultPfp from '@/public/icons/default_pfp.svg';
 import ChoiceArrow from '@/public/icons/choice_arrow_icon.svg';

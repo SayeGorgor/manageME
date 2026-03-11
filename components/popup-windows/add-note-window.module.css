@@ -48,10 +48,13 @@
 
 .notes-form input {
     height: 1.7rem;
+    padding-left: .1rem;
 }
 
 .notes-form textarea {
     resize: none;
+    padding-left: .2rem;
+    padding-top: .2rem;
 }
 
 .notes-form button {

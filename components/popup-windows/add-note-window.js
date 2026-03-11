@@ -1,16 +1,40 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styles from './add-note-window.module.css';
 import CloseWindowIcon from '@/public/icons/close_window_icon.svg';
+import { createNoteAction } from '../forms/actions';
 
 export default function AddNoteWindow(props) {
-    const { showAddNoteWindow, setShowAddNoteWindow } = props;
+    const { showAddNoteWindow, setShowAddNoteWindow, user } = props;
     const addNotesRef = useRef(null);
+    const queryClient = useQueryClient();
 
     //Functions
+    const createNoteMutation = useMutation({
+        mutationFn: createNoteAction,
+        onSuccess: () => {
+            console.log('Create Notes Success!');
+            queryClient.invalidateQueries({ queryKey: ['notes'] });
+            closeWindow();
+        }
+    });
+
     const closeWindow = () => {
+        const form = document.querySelector('#notes-form');
+
         setShowAddNoteWindow(false);
+        form.reset();
+    }
+
+    const createNote = (e) => {
+        e.preventDefault();
+
+        createNoteMutation.mutate({
+            userID: user?.id, 
+            formData: new FormData(e.currentTarget)
+        });
     }
 
     //Use Effects
@@ -40,10 +64,14 @@ export default function AddNoteWindow(props) {
             >
                 <CloseWindowIcon 
                     className={styles['close-window-icon']} 
-                    onClick={() => setShowAddNoteWindow(false)}
+                    onClick={closeWindow}
                 />
                 <h2>Create New Note</h2>
-                <form className={styles['notes-form']}>
+                <form 
+                    id='notes-form'
+                    className={styles['notes-form']} 
+                    onSubmit={createNote}
+                >
                     <label className={styles['title-label']}>
                         Note Title:
                         <input 
@@ -55,7 +83,7 @@ export default function AddNoteWindow(props) {
                     <label className={styles['details-label']}>
                         Extra Details:
                         <textarea 
-                            name='message'
+                            name='details'
                             rows={6}
                         />
                     </label>

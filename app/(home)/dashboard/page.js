@@ -6,21 +6,46 @@ import styles from './page.module.css';
 
 import TaskCard from '@/components/cards/task-card';
 import EventCard from '@/components/cards/event-card';
-import AddNoteWindow from '@/components/add-note-window';
+import NoteCard from '@/components/cards/note-card';
+import AddNoteWindow from '@/components/popup-windows/add-note-window';
 
 import Spinner from '@/public/icons/spinner_animation.svg';
 
 import { useOrg } from '@/lib/providers/current-org-provider';
-import { fetchEvents, fetchUserTasks } from '@/lib/client-actions';
+import { 
+    fetchEvents, 
+    fetchUserTasks, 
+    fetchNotes,
+    fetchCurrentUser
+} from '@/lib/client-actions';
+import InviteMemberPopUp from '@/components/popup-windows/invite-member-popup';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Home() {
     const { currentOrg, setCurrentOrg } = useOrg();
 
+    //Cached Queries
+    const { data: user } = useQuery({
+        queryKey: ['user'],
+        queryFn: fetchCurrentUser,
+        staleTime: 1000 * 60 * 5
+    });
+    
+    const { data: notes } = useQuery({
+        queryKey: ['notes', user?.id],
+        queryFn: () => fetchNotes(user.id),
+        enabled: !!user?.id,
+        staleTime: Infinity,
+        refetchOnWindowFocus: false,
+        keepPreviousData: true,
+    });
+
+    //States
     const [tasks, setTasks] = useState([]);
     const [events, setEvents] = useState([]);
-    const [notes, setNotes] = useState([]);
     const [loadingDashCards, setLoadingDashCards] = useState(true);
     const [showAddNoteWindow, setShowAddNoteWindow] = useState(false);
+    const [showInvitePopup, setShowInvitePopup] = useState(false);
     const [hasError, setHasError] = useState(false);
 
     //Use Effect
@@ -28,6 +53,7 @@ export default function Home() {
     useEffect(() => {
         (async() => {
             setLoadingDashCards(true);
+            
             try {
                 const fetchedTasks = await fetchUserTasks(currentOrg.org.id);
                 setTasks(fetchedTasks);
@@ -62,7 +88,7 @@ export default function Home() {
                                 </p>
                             </div>
                             :
-                            tasks.map(task => (
+                            tasks.slice(0, 3).map(task => (
                                 <li key={task.id}>
                                     <TaskCard 
                                         content={task.content} 
@@ -93,7 +119,7 @@ export default function Home() {
                                 </p>
                             </div>
                             :
-                            events.map(event => (
+                            events.slice(0, 3).map(event => (
                                 <li key={event.id}>
                                     <EventCard 
                                         content={event.content} 
@@ -114,6 +140,7 @@ export default function Home() {
                 <AddNoteWindow 
                     showAddNoteWindow={showAddNoteWindow}
                     setShowAddNoteWindow={setShowAddNoteWindow}
+                    user={user}
                 />
 
                 <div className={styles['notes-header-container']}>
@@ -127,20 +154,54 @@ export default function Home() {
                 </div>
 
                 <ul className={styles['card-list']}>
-                    <li>
-                        <TaskCard />
-                    </li>
-
-                    <li>
-                        <TaskCard />
-                    </li>
+                    {loadingDashCards ? 
+                        <Spinner className={styles.spinner} />
+                        :
+                        notes?.length === 0 ? 
+                            <div className={styles['no-tasks-text-wrapper']}>
+                                <p className={
+                                    styles['no-tasks-text']
+                                }>
+                                    No Current Notes
+                                </p>
+                            </div>
+                            :
+                            notes.slice(0, 3).map(note => (
+                                <li key={note.id}>
+                                    <NoteCard 
+                                        content={note.content} 
+                                        title={note.title}
+                                        orgID={note['org_id']}
+                                        createdAt={note['created_at']}
+                                        remindAt={note.deadline}
+                                    />
+                                </li>
+                            ))
+                    }
                 </ul>
                 
                 <a href='#'>View All</a>
             </section>
 
             <div className={styles['bottom-buttons-container']}>
-                <Link href='/members' className={'view-team-members-btn'}>View Team Members</Link>
+                <InviteMemberPopUp 
+                    showInvitePopup={showInvitePopup}
+                    setShowInvitePopup={setShowInvitePopup}
+                />
+
+                <Link 
+                    href='/members' 
+                    className={'view-team-members-btn'}
+                >
+                    View Team Members
+                </Link>
+
+                <button 
+                    className={'invite-member-btn'}
+                    onClick={() => setShowInvitePopup(true)}
+                >
+                    Invite Member
+                </button>
             </div>
         </main>
     );
