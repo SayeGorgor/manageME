@@ -3,23 +3,30 @@ import { getCurrentUser, getUserTasks } from "@/lib/server-actions";
 export async function GET(req, {params}) {
     const { id } = await params;
 
-    const user = await getCurrentUser();
+    try {
+        const {data: user, error: userError } = await getCurrentUser();
 
-    if(!user) {
-        return Response.json(
-            {error: 'Unable to fetch tasks'}, 
-            {status: 401}
-        );
-    }
+        if(userError) {
+            return Response.json(
+                { error: 'Unable to fetch tasks' }, 
+                { status: 401 }
+            );
+        }
 
-    const tasks = await getUserTasks({ userID: user.id, orgID: id });
+        const tasks = await getUserTasks({ userID: user.id, orgID: id });
 
-    if(!tasks) {
+        if(!tasks) {
+            return Response.json(
+                { error: 'Unable to fetch tasks' }, 
+                { status: 401 }
+            );
+        }
+
+        return Response.json(tasks, {status: 200});
+    } catch(err) {
         return Response.json(
             {error: 'Internal Server Error'}, 
             {status: 500}
         );
     }
-
-    return Response.json(tasks, {status: 200});
 }

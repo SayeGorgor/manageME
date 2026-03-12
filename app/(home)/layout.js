@@ -1,13 +1,19 @@
-import Header from "@/components/header";
-import { getCurrentUser, getUserOrgs, getNotes } from "@/lib/server-actions";
 import { redirect } from "next/navigation";
 import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
+
+import { getCurrentUser, getUserOrgs, getNotes } from "@/lib/server-actions";
 import { CurrentOrgProvider } from "@/lib/providers/current-org-provider";
+
+import Header from "@/components/header";
+import MessagingWindow from "@/components/popup-windows/messaging-window";
 
 export default async function DashboardLayout({ children }) {
     const queryClient = new QueryClient();
-    const user = await getCurrentUser();
-    if(!user) redirect('/');
+    const { data: user, error: userError } = await getCurrentUser();
+    if(userError) {
+        console.log('Error: ', userError);
+        redirect('/');
+    }
 
     const memberships = await getUserOrgs(user.id);
     
@@ -26,6 +32,7 @@ export default async function DashboardLayout({ children }) {
         <HydrationBoundary state={dehydrate(queryClient)}>
             <CurrentOrgProvider initialOrg={memberships[0]}>
                 <Header />
+                <MessagingWindow />
                 { children }
             </CurrentOrgProvider>
         </HydrationBoundary>

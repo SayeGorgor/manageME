@@ -3,7 +3,11 @@ import { getCurrentUser, getOrgEvents } from "@/lib/server-actions";
 export async function GET(req, { params }) {
     const { id } =  await params;
 
-    const user = await getCurrentUser();
+    const {data: user, error: userError } = await getCurrentUser();
+    if(userError) return Response.json(
+        { error: userError.message },
+        { status: userError.status ?? 404 }
+    );
 
     console.log('User: ', user)
 

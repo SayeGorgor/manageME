@@ -111,7 +111,9 @@ export default function Header() {
                         `}
                         onClick={handleOrgDropdownClick}
                     >
-                        <div className={styles['organization-img']}>A</div>
+                        <div className={styles['organization-img']}>
+                            {currentOrg.org.name.charAt(0).toUpperCase()}
+                        </div>
                         {currentOrg.org.name}
                         <ChoiceArrow className={styles['choice-arrow']} />
 

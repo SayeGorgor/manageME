@@ -95,7 +95,7 @@ export default function AddNoteWindow(props) {
                     ${styles.overlay}
                     ${showAddNoteWindow ? styles.visible : ''}
                 `}
-                onClick={() => setShowAddNoteWindow(false)}
+                onClick={closeWindow}
             ></div>
         </>
     )

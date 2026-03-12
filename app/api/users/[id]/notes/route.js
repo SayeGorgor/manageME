@@ -1,4 +1,4 @@
-import { createNote, getNotes } from "@/lib/server-actions";
+import { postNote, getNotes } from "@/lib/server-actions";
 
 export async function GET(req, { params }) {
     const { id } = await params;
@@ -21,7 +21,7 @@ export async function POST(req, { params }) {
 
     const { id } = await params;
 
-    const { error, data } = await createNote({ userID: id, title, details });
+    const { error, data } = await postNote({ userID: id, title, details });
     if(error) return Response.json(
         {error: error.message}, {status: error.status}
     );

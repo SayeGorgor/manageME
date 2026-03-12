@@ -46,6 +46,7 @@ model Users {
   memberships Memberships[]
   tasks Tasks[]
   notes Notes[]
+  sent_invites Invitations[]
 
   @@index([email])
 }
@@ -60,6 +61,7 @@ model Organizations {
   tasks Tasks[]
   notes Notes[]
   events Events[]
+  sent_invites Invitations[]
 
   @@index([id])
 }
@@ -125,4 +127,19 @@ model Events {
   org Organizations @relation(fields: [org_id], references: [id], onDelete: Cascade)
 
   @@index([org_id])
+}
+
+model Invitations {
+  id String @id @unique @default(uuid()) @db.Uuid
+  org_id String @db.Uuid
+  email String
+  role Role @default(MEMBER)
+  token String @default(uuid()) @db.Uuid
+  accepted_at DateTime?
+  expires_at DateTime
+  invited_by String @db.Uuid
+  created_at DateTime @default(now())
+  
+  user Users @relation(fields: [invited_by], references: [id], onDelete: Cascade)
+  org Organizations @relation(fields: [org_id], references: [id], onDelete: Cascade)
 }
