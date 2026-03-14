@@ -1,0 +1,144 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  MEMBER
+  ADMIN
+  OWNER
+}
+
+model Sessions {
+  id         String    @id @db.Uuid
+  user_id    String    @db.Uuid
+  expires_at DateTime
+  created_at DateTime  @default(now())
+  last_used  DateTime?
+
+  user Users @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([expires_at])
+}
+
+model Users {
+  id           String   @id @unique @default(uuid()) @db.Uuid
+  email        String   @unique
+  first_name   String
+  last_name    String
+  password     String
+  phone_number String?
+  pfp          Bytes?
+  created_at   DateTime @default(now())
+
+  session      Sessions[]
+  memberships  Memberships[]
+  tasks        Tasks[]
+  notes        Notes[]
+  sent_invites Invitations[]
+
+  @@index([email])
+}
+
+model Organizations {
+  id         String   @id @unique @default(uuid()) @db.Uuid
+  name       String
+  pfp        Bytes?
+  created_at DateTime @default(now())
+
+  memberships  Memberships[]
+  tasks        Tasks[]
+  notes        Notes[]
+  events       Events[]
+  sent_invites Invitations[]
+
+  @@index([id])
+}
+
+model Memberships {
+  id        String   @id @unique @default(uuid()) @db.Uuid
+  user_id   String   @db.Uuid
+  org_id    String   @db.Uuid
+  role      Role     @default(MEMBER)
+  joined_at DateTime @default(now())
+
+  org  Organizations @relation(fields: [org_id], references: [id], onDelete: Cascade)
+  user Users         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([org_id])
+  @@index([user_id])
+}
+
+model Tasks {
+  id           String    @id @unique @default(uuid()) @db.Uuid
+  user_id      String    @db.Uuid
+  org_id       String    @db.Uuid
+  title        String
+  content      String?
+  deadline     DateTime?
+  completed_at DateTime?
+  created_at   DateTime  @default(now())
+
+  user Users         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  org  Organizations @relation(fields: [org_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([org_id])
+}
+
+model Notes {
+  id         String    @id @unique @default(uuid()) @db.Uuid
+  user_id    String    @db.Uuid
+  org_id     String?   @db.Uuid
+  title      String
+  content    String
+  remind_at  DateTime?
+  created_at DateTime  @default(now())
+
+  user Users          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  org  Organizations? @relation(fields: [org_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model Events {
+  id         String    @id @unique @default(uuid()) @db.Uuid
+  org_id     String    @db.Uuid
+  name       String
+  date       DateTime
+  event_type Role      @default(MEMBER)
+  content    String?
+  start_time DateTime?
+  end_time   DateTime?
+  created_at DateTime  @default(now())
+
+  org Organizations @relation(fields: [org_id], references: [id], onDelete: Cascade)
+
+  @@index([org_id])
+}
+
+model Invitations {
+  id          String    @id @unique @default(uuid()) @db.Uuid
+  org_id      String    @db.Uuid
+  email       String
+  role        Role      @default(MEMBER)
+  token       String    @default(uuid()) @db.Uuid
+  accepted_at DateTime?
+  expires_at  DateTime
+  invited_by  String    @db.Uuid
+  created_at  DateTime  @default(now())
+
+  user Users         @relation(fields: [invited_by], references: [id], onDelete: Cascade)
+  org  Organizations @relation(fields: [org_id], references: [id], onDelete: Cascade)
+}
