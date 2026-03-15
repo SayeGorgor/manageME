@@ -88,7 +88,7 @@ export default function Home() {
                                 </p>
                             </div>
                             :
-                            tasks.slice(0, 3).map(task => (
+                            tasks?.slice(0, 3).map(task => (
                                 <li key={task.id}>
                                     <TaskCard 
                                         content={task.content} 
@@ -119,7 +119,7 @@ export default function Home() {
                                 </p>
                             </div>
                             :
-                            events.slice(0, 3).map(event => (
+                            events?.slice(0, 3).map(event => (
                                 <li key={event.id}>
                                     <EventCard 
                                         content={event.content} 
@@ -166,7 +166,7 @@ export default function Home() {
                                 </p>
                             </div>
                             :
-                            notes.slice(0, 3).map(note => (
+                            notes?.slice(0, 3).map(note => (
                                 <li key={note.id}>
                                     <NoteCard 
                                         content={note.content} 

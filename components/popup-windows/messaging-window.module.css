@@ -18,6 +18,14 @@
     box-shadow: 0 8px 24px rgba(0,0,0,0.12);
 }
 
+.body.window-maximized {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 99vh !important;
+    width: 98vw !important;
+}
+
 .body main {
     display: flex;
     height: 100%;
@@ -48,6 +56,10 @@
 
 .contact-list-section.expanded {
     width: 40%;
+}
+
+.contact-list-section.window-maximized {
+    width: 27.5% !important;
 }
 
 .contact-list {
@@ -102,12 +114,15 @@
     border: none;
 }
 
-.expansion-toggle-btn.visible {
-    margin: .25rem 0;
+.expansion-toggle-btn.expanded {
+    margin: .25rem 0 !important;
+}
+
+.expansion-toggle-btn.hidden {
+    display: none !important;
 }
 
 .expansion-toggle-btn-icon {
-    display: none;
     color: white;
     height: 2.5rem;
     width: 2.5rem;
@@ -168,22 +183,58 @@
     width: 85%;
 }
 
+.messaging-section.window-maximized {
+    width: 72.5%;
+}
+
 /* CLOSED WINDOW STYLES */
 
-.close-window-icon {
+.window-option-btns-list {
+    display: flex;
+    align-items: center;
     margin-left: auto;
-    height: 1.5rem;
-    width: auto;
+}
+
+.close-window-btn {
+    display: flex;
     color: black;
     border-radius: .5rem;
+    border: none;
+    background-color: transparent;
+    padding: .2rem;
     transition: background-color .25s ease, color .25s ease;
 }
 
-.close-window-icon:hover {
+.close-window-btn-icon {
+    height: 1.5rem;
+    width: auto;
+    margin: auto;
+}
+
+.close-window-btn:hover {
     cursor: pointer;
     background-color: red;
     color: white;
     transition: none;
+}
+
+.window-size-toggle-btn {
+    height: 2rem;
+    width: auto;
+    background-color: transparent;
+    border: none;
+    border-radius: .5rem;
+    transition: background-color .25s ease, color .25s ease;
+}
+
+.window-size-toggle-btn:hover {
+    cursor: pointer;
+    background-color: white;
+}
+
+.window-size-toggle-btn-icon {
+    height: 100%;
+    width: 100%;
 }
 
 .closed-window {
